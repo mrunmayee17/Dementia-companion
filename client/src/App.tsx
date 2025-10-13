@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 // Temporarily removing icons for desktop build
 import { voiceService } from './services/voiceService';
+import MemoryCapsule from './components/MemoryCapsule';
 import './App.css';
 
 interface Message {
@@ -24,6 +25,7 @@ function App() {
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeMode, setActiveMode] = useState<'chat' | 'memory' | 'spotify'>('chat');
+  const [showMemoryCapsule, setShowMemoryCapsule] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -56,9 +58,53 @@ function App() {
   };
 
   const handleSendMessage = async () => {
-    if (!inputText.trim()) return;
+    await handleSendMessageWithText();
+  };
 
-    const userMessage = inputText.trim();
+  const startRecording = async () => {
+    if (!voiceService.isSupported()) {
+      addMessage('Voice recognition is not supported in your browser. Please try typing instead.', false);
+      return;
+    }
+
+    try {
+      setIsRecording(true);
+      setIsLoading(true);
+      
+      const transcript = await voiceService.startListening();
+      
+      if (transcript.trim()) {
+        setInputText(transcript);
+        addMessage('I heard: "' + transcript + '"', false);
+      }
+      
+    } catch (error) {
+      console.error('Voice recognition error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Voice recognition failed';
+      addMessage(errorMessage, false);
+    } finally {
+      setIsRecording(false);
+      setIsLoading(false);
+    }
+  };
+
+  const stopRecording = () => {
+    voiceService.stopListening();
+    setIsRecording(false);
+    setIsLoading(false);
+  };
+
+  const handleMemoryPromptSelect = (prompt: string) => {
+    setInputText(prompt);
+    setShowMemoryCapsule(false);
+    // Send the selected prompt directly
+    handleSendMessageWithText(prompt);
+  };
+
+  const handleSendMessageWithText = async (messageText?: string) => {
+    const userMessage = messageText || inputText.trim();
+    if (!userMessage) return;
+
     setInputText('');
     addMessage(userMessage, true);
     setIsLoading(true);
@@ -100,51 +146,21 @@ function App() {
     setIsLoading(false);
   };
 
-  const startRecording = async () => {
-    if (!voiceService.isSupported()) {
-      addMessage('Voice recognition is not supported in your browser. Please try typing instead.', false);
-      return;
-    }
-
-    try {
-      setIsRecording(true);
-      setIsLoading(true);
-      
-      const transcript = await voiceService.startListening();
-      
-      if (transcript.trim()) {
-        setInputText(transcript);
-        addMessage('I heard: "' + transcript + '"', false);
-      }
-      
-    } catch (error) {
-      console.error('Voice recognition error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Voice recognition failed';
-      addMessage(errorMessage, false);
-    } finally {
-      setIsRecording(false);
-      setIsLoading(false);
-    }
-  };
-
-  const stopRecording = () => {
-    voiceService.stopListening();
-    setIsRecording(false);
-    setIsLoading(false);
-  };
-
   const handleModeChange = (mode: 'chat' | 'memory' | 'spotify') => {
     setActiveMode(mode);
     let modeMessage = '';
     switch (mode) {
       case 'chat':
         modeMessage = 'Ready to chat! Ask me anything you\'d like to know.';
+        setShowMemoryCapsule(false);
         break;
       case 'memory':
-        modeMessage = 'Let\'s explore some wonderful memories together. What would you like to remember?';
+        modeMessage = 'Welcome to Memory Lane! Here\'s a special memory to explore together.';
+        setShowMemoryCapsule(true);
         break;
       case 'spotify':
         modeMessage = 'Time for some music! What songs would you like to hear today?';
+        setShowMemoryCapsule(false);
         break;
     }
     addMessage(modeMessage, false);
@@ -187,6 +203,10 @@ function App() {
         </div>
 
         <div className="messages-container">
+          {showMemoryCapsule && activeMode === 'memory' && (
+            <MemoryCapsule onMemorySelect={handleMemoryPromptSelect} />
+          )}
+          
           {messages.map((message) => (
             <div key={message.id} className={`message ${message.isUser ? 'user' : 'assistant'}`}>
               <div className="message-content">

@@ -119,25 +119,60 @@ app.post('/api/memory-lane', async (req, res) => {
       timestamp: new Date().toISOString()
     });
 
-    const prompt = `You are helping someone with dementia explore their memories. 
-    Please provide warm, encouraging responses about ${memoryType || 'general memories'}.
-    Ask gentle questions that might help them recall positive experiences.
-    Keep the tone supportive and nostalgic.
-    
-    ${query ? `User input: ${query}` : 'Start a conversation about pleasant memories.'}`;
+    // Check if the query mentions Mira or granddaughter
+    const isMiraRelated = query && (query.toLowerCase().includes('mira') || 
+                                   query.toLowerCase().includes('granddaughter') ||
+                                   query.toLowerCase().includes('visit') ||
+                                   query.toLowerCase().includes('special day') ||
+                                   query.toLowerCase().includes('park') ||
+                                   query.toLowerCase().includes('hug') ||
+                                   query.toLowerCase().includes('scarf') ||
+                                   query.toLowerCase().includes('red') ||
+                                   query.toLowerCase().includes('autumn') ||
+                                   query.toLowerCase().includes('smile'));
+
+    let prompt;
+    if (isMiraRelated) {
+      prompt = `You are helping someone with dementia recall a beautiful memory with their granddaughter Mira. 
+      This was a special visit where they spent time together outdoors in autumn, both wearing matching red polka dot scarves.
+      They shared the most wonderful hug, both smiling so brightly with pure joy and love.
+      The autumn leaves created a perfect backdrop for this precious grandmother-granddaughter moment.
+      Respond with warmth and help them explore this precious memory.
+      Keep responses simple, loving, and encouraging.
+      
+      User input: ${query}`;
+    } else {
+      prompt = `You are helping someone with dementia explore their memories. 
+      Please provide warm, encouraging responses about ${memoryType || 'general memories'}.
+      Ask gentle questions that might help them recall positive experiences.
+      Keep the tone supportive and nostalgic.
+      
+      ${query ? `User input: ${query}` : 'Start a conversation about pleasant memories.'}`;
+    }
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    // Simulate memory suggestions
-    const memorySuggestions = [
-      "Tell me about your favorite childhood meal",
-      "What was your favorite song when you were young?",
-      "Do you remember your first pet?",
-      "What was your wedding day like?",
-      "Tell me about a special holiday memory"
-    ];
+    // Memory suggestions based on context
+    let memorySuggestions;
+    if (isMiraRelated) {
+      memorySuggestions = [
+        "Do you remember choosing those matching red scarves together?",
+        "How did it feel when Mira gave you that big, warm hug?",
+        "What made you both smile so joyfully that autumn day?",
+        "Tell me about the beautiful autumn leaves around you",
+        "What was special about wearing matching outfits with Mira?"
+      ];
+    } else {
+      memorySuggestions = [
+        "Tell me about your favorite childhood meal",
+        "What was your favorite song when you were young?",
+        "Do you remember your first pet?",
+        "What was your wedding day like?",
+        "Tell me about a special holiday memory"
+      ];
+    }
 
     res.json({
       response: text,
