@@ -1,0 +1,27 @@
+# Core dependencies
+streamlit>=1.28.0
+python-dotenv>=1.0.0
+openai>=1.3.0
+
+# AI/ML dependencies
+sentence-transformers>=2.2.2
+faiss-cpu>=1.7.4  # Use faiss-gpu for GPU support
+numpy>=1.24.0
+torch>=2.0.0
+
+# Storage and database
+# sqlite3 is built into Python, no separate installation needed
+
+# Image processing
+Pillow>=10.0.0
+
+# Audio processing (optional, for local ASR)
+librosa>=0.10.0  # Optional for audio processing
+
+# Utilities
+pyyaml>=6.0
+pandas>=2.0.0
+
+# Development dependencies (optional)
+pytest>=7.4.0
+black>=23.0.0
