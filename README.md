@@ -1,5 +1,5 @@
 
-# Memory Capsule - AI Powered Memory Assistant with Vector Database
+# Memory Capsule - AI Powered Memory Assistant 
 Helping dementia patients recall memories, people, and routines using multimodal AI
 
 Built using: 
