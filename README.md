@@ -118,6 +118,9 @@ Our vector-based architecture provides:
 - **Embedding Generation**: ~0.5 seconds per text
 - **Index Size**: ~7KB per 100 memories
 
+## 🎥 Demo
+[Watch the Demo](https://youtu.be/pYjaYQ3F2DQ?si=k1iODhbD)
+
 ## 🚀 Setup & Installation
 
 ### Prerequisites
@@ -206,7 +209,6 @@ class Config:
     temperature: float = 0.7
     max_tokens: int = 500
 ```
-Demo Link: https://youtu.be/pYjaYQ3F2DQ?si=k1iODhbD_D-V4F9S
 
 ## 📚 Further Reading
 - docs/ARCHITECTURE.md – full docs and data-flow diagram
