@@ -1,9 +1,14 @@
 
-# Memory Capsule - AI-Powered Memory Assistant with Vector Database
+# Memory Capsule - AI Powered Memory Assistant with Vector Database
+Helping dementia patients recall memories, people, and routines using multimodal AI
 
-**Enhanced with FAISS + SQLite for Semantic Memory Storage and Retrieval**
-
-Built with the NVIDIA NeMo Agent Toolkit pattern, Streamlit, and Vector Database Technology
+Built using: 
+- NVIDIA NeMo Agent Toolkit pattern
+- NVIDIA Parakeet Whisper (speech-to-text)
+- NVIDIA Nemotron Nano 9B v2 (language generation)
+- NVIDIA Nemotron Nano VL 8B (vision understanding)
+- Streamlit
+- Vector Database Technology
 
 > See full architecture and diagram in docs/ARCHITECTURE.md
 
