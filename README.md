@@ -206,6 +206,7 @@ class Config:
     temperature: float = 0.7
     max_tokens: int = 500
 ```
+Demo Link: https://youtu.be/pYjaYQ3F2DQ?si=k1iODhbD_D-V4F9S
 
 ## 📚 Further Reading
 - docs/ARCHITECTURE.md – full docs and data-flow diagram
