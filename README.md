@@ -3,7 +3,7 @@
 Helping dementia patients recall memories, people, and routines using multimodal AI
 
 Built using: 
-- NVIDIA NeMo Agent Toolkit pattern
+- NVIDIA NeMo Agent Toolkit 
 - NVIDIA Parakeet Whisper (speech-to-text)
 - NVIDIA Nemotron Nano 9B v2 (language generation)
 - NVIDIA Nemotron Nano VL 8B (vision understanding)
