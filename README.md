@@ -7,6 +7,7 @@ Built using:
 - NVIDIA Parakeet (parakeet-ctc-0.6b-asr) / Open AI Whisper (speech-to-text)
 - NVIDIA Nemotron Nano VL 8B (vision understanding)
 - Streamlit
+- Magpie TTS
 - Vector Database Technology
 
 > See full architecture and diagram in docs/ARCHITECTURE.md
